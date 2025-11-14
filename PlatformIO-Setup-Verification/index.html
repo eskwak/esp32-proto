@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CASH Interface</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <img src="../img/gt-logo.png" alt="Georgia Tech" class="brand-logo" onerror="this.style.display='none'">
+        <span class="brand-name">CASH</span>
+      </div>
+      <nav class="header-actions">
+        <button id="signOutBtn" class="btn btn-outline" hidden>Sign out</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="hero">
+    <div class="container hero-inner">
+      <section class="hero-copy">
+        <h1>Cat Automated Smart Home</h1>
+        <p>Log in to remotely interact with your feline friend.</p>
+      </section>
+
+      <section class="auth-card" id="authCard">
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-tab="login" role="tab" aria-selected="true">Log in</button>
+          <button class="tab" data-tab="signup" role="tab" aria-selected="false">Sign up</button>
+        </div>
+
+        <div class="tab-panels">
+          <form id="loginForm" class="panel" data-panel="login" aria-hidden="false">
+            <div class="field">
+              <label for="loginEmail">Email</label>
+              <input id="loginEmail" type="email" autocomplete="email" required>
+            </div>
+            <div class="field">
+              <label for="loginPassword">Password</label>
+              <input id="loginPassword" type="password" autocomplete="current-password" required>
+            </div>
+            <button type="submit" class="btn btn-gold">Log in</button>
+            <div class="divider"><span>or</span></div>
+            <button type="button" id="googleLoginBtn" class="btn btn-google">Continue with Google</button>
+            <p class="form-message" id="loginMessage" role="alert" aria-live="polite"></p>
+          </form>
+
+          <form id="signupForm" class="panel hidden" data-panel="signup" aria-hidden="true">
+            <div class="field">
+              <label for="signupEmail">Email</label>
+              <input id="signupEmail" type="email" autocomplete="email" required>
+            </div>
+            <div class="field">
+              <label for="signupPassword">Password</label>
+              <input id="signupPassword" type="password" autocomplete="new-password" minlength="6" required>
+            </div>
+            <button type="submit" class="btn btn-gold">Create account</button>
+            <p class="form-message" id="signupMessage" role="alert" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <section id="appSection" class="app-section hidden">
+        <div class="card">
+          <h2>Welcome, <span id="userEmail"></span></h2>
+          <p>Your cat tower is ready. Head to the dashboard to start playing.</p>
+          <a class="btn btn-gold" href="#" id="goDashboard">Open Dashboard</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"name": "PlatformIO-Setup-Verification",
+			"path": "."
+		}
+	],
+	"settings": {}
+}

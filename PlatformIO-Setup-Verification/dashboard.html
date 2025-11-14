@@ -1,0 +1,94 @@
+<!-- 
+    Description:
+        - Contains the dashboard interface for managing cat tower peripherals.
+        - This page is accessible only after user authentication.
+        - Takes cat tower's device IP address as input to connect and control peripherals.
+        
+    Author:
+        Eddie Kwak
+    Last Modified:
+        11/13/25
+-->
+
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CASH Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand">
+                <img src="../img/gt-logo.png" alt="Georgia Tech" class="brand-logo" onerror="this.style.display='none'">
+                <span class="brand-name">CASH</span>
+            </div>
+            <nav class="header-actions">
+                <button id="signOutBtn" class="btn btn-outline">Sign out</button>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="hero dashboard-hero" id="dashboardPage">
+        <div class="container dashboard-inner">
+            <section class="card connection-card">
+                <header class="card-header">
+                    <h1>ESP32 Control Panel</h1>
+                    <p class="card-subtitle">
+                        Enter the local IP address of the ESP32 to send commands directly over your network.
+                    </p>
+                </header>
+
+                <div class="field">
+                    <label for="esp32-ip">ESP32 IP Address</label>
+                    <input type="text" id="esp32-ip" placeholder="192.168.1.100" autocomplete="off">
+                </div>
+
+                <div class="card-footer">
+                    <button class="btn btn-outline" type="button" onclick="refreshStatus()">Refresh Status</button>
+                </div>
+
+                <div class="status-message" id="message" role="status" aria-live="polite"></div>
+            </section>
+
+            <section class="card device-card">
+                <header class="device-header">
+                    <h2>Heating Pad</h2>
+                    <span class="device-gpio">GPIO 26</span>
+                </header>
+                <div class="device-status">
+                    <span class="status-indicator off" id="heating-pad-indicator" aria-hidden="true"></span>
+                    <span id="heating-pad-status">Status: Unknown</span>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-gold" type="button" onclick="controlDevice('heating_pad', 'on')">Turn On</button>
+                    <button class="btn btn-navy" type="button" onclick="controlDevice('heating_pad', 'off')">Turn Off</button>
+                </div>
+            </section>
+
+            <section class="card device-card">
+                <header class="device-header">
+                    <h2>Temperature Sensor</h2>
+                    <span class="device-gpio">GPIO 27</span>
+                </header>
+                <div class="device-status">
+                    <span class="status-indicator off" id="temperature-sensor-indicator" aria-hidden="true"></span>
+                    <span id="temperature-sensor-status">Status: Unknown</span>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-gold" type="button" onclick="controlDevice('temperature_sensor', 'on')">Turn On</button>
+                    <button class="btn btn-navy" type="button" onclick="controlDevice('temperature_sensor', 'off')">Turn Off</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+</body>
+</html>
+
