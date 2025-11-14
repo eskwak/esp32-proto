@@ -1,13 +1,29 @@
 <!-- 
+    ============================================================================
+    CASH Dashboard - Device Control Interface
+    ============================================================================
+    
     Description:
-        - Contains the dashboard interface for managing cat tower peripherals.
-        - This page is accessible only after user authentication.
-        - Takes cat tower's device IP address as input to connect and control peripherals.
+        - Main dashboard page for controlling ESP32 peripherals
+        - Accessible only after user authentication
+        - Uses Firebase Realtime Database for communication (works across networks)
+        - Each device card shows current status and control buttons
         
-    Author:
-        Eddie Kwak
-    Last Modified:
-        11/13/25
+    Communication Flow:
+        1. User clicks "Turn On/Off" button
+        2. JavaScript (app.js) writes state to Firebase
+        3. ESP32 reads from Firebase and updates GPIO pin
+        4. UI automatically updates via Firebase real-time listeners
+        
+    TO ADD A NEW PERIPHERAL:
+        1. Copy an existing device card section (lines 59-72 or 74-87)
+        2. Update the device name, GPIO number, and IDs
+        3. Update onclick handlers to use your device name
+        4. Update app.js (see comments there)
+        5. Update ESP32 code (see comments in main.cpp)
+    
+    Author: Eddie Kwak
+    Last Modified: 11/13/25
 -->
 
 <!DOCTYPE HTML>
@@ -22,6 +38,9 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+    <!-- ========================================================================
+         HEADER SECTION - Navigation and Sign Out
+         ======================================================================== -->
     <header class="site-header">
         <div class="container header-inner">
             <div class="brand">
@@ -34,61 +53,129 @@
         </div>
     </header>
     
+    <!-- ========================================================================
+         MAIN CONTENT AREA - Device Control Dashboard
+         ======================================================================== -->
     <main class="hero dashboard-hero" id="dashboardPage">
         <div class="container dashboard-inner">
+            
+            <!-- ====================================================================
+                 CONNECTION INFO CARD
+                 ==================================================================== -->
+            <!-- This card shows connection status and refresh button -->
             <section class="card connection-card">
                 <header class="card-header">
                     <h1>ESP32 Control Panel</h1>
                     <p class="card-subtitle">
-                        Enter the local IP address of the ESP32 to send commands directly over your network.
+                        Control your ESP32 devices via Firebase Realtime Database. Works across different networks.
                     </p>
                 </header>
 
-                <div class="field">
+                <!-- IP Address input (hidden, not needed with Firebase) -->
+                <div class="field" style="display: none;">
                     <label for="esp32-ip">ESP32 IP Address</label>
                     <input type="text" id="esp32-ip" placeholder="192.168.1.100" autocomplete="off">
                 </div>
 
+                <!-- Refresh Status Button -->
                 <div class="card-footer">
                     <button class="btn btn-outline" type="button" onclick="refreshStatus()">Refresh Status</button>
                 </div>
 
+                <!-- Status Message Display Area -->
                 <div class="status-message" id="message" role="status" aria-live="polite"></div>
             </section>
 
+            <!-- ====================================================================
+                 DEVICE CONTROL CARDS
+                 ==================================================================== -->
+            <!-- Each device has its own card with status indicator and control buttons -->
+            <!-- TO ADD A NEW PERIPHERAL: Copy one of these device card sections and modify -->
+            
+            <!-- HEATING PAD DEVICE CARD -->
             <section class="card device-card">
                 <header class="device-header">
                     <h2>Heating Pad</h2>
-                    <span class="device-gpio">GPIO 26</span>
+                    <!-- GPIO pin number - must match ESP32 code -->
+                    <span class="device-gpio">GPIO 5</span>
                 </header>
+                
+                <!-- Status Indicator and Text -->
+                <!-- The indicator changes color based on state (on/off) -->
+                <!-- IDs must match app.js updateDeviceStatus() function -->
                 <div class="device-status">
                     <span class="status-indicator off" id="heating-pad-indicator" aria-hidden="true"></span>
                     <span id="heating-pad-status">Status: Unknown</span>
                 </div>
+                
+                <!-- Control Buttons -->
+                <!-- onclick handlers call controlDevice() with device name and action -->
                 <div class="button-group">
                     <button class="btn btn-gold" type="button" onclick="controlDevice('heating_pad', 'on')">Turn On</button>
                     <button class="btn btn-navy" type="button" onclick="controlDevice('heating_pad', 'off')">Turn Off</button>
                 </div>
             </section>
 
+            <!-- TEMPERATURE SENSOR DEVICE CARD -->
             <section class="card device-card">
                 <header class="device-header">
                     <h2>Temperature Sensor</h2>
-                    <span class="device-gpio">GPIO 27</span>
+                    <!-- GPIO pin number - must match ESP32 code (TEMPERATURE_SENSOR_PIN) -->
+                    <span class="device-gpio">GPIO 18</span>
                 </header>
+                
+                <!-- Status Indicator and Text -->
+                <!-- IDs: temperature-sensor-indicator, temperature-sensor-status -->
+                <!-- These IDs are used by app.js to update the UI -->
                 <div class="device-status">
                     <span class="status-indicator off" id="temperature-sensor-indicator" aria-hidden="true"></span>
                     <span id="temperature-sensor-status">Status: Unknown</span>
                 </div>
+                
+                <!-- Control Buttons -->
+                <!-- Device name "temperature_sensor" must match app.js and ESP32 code -->
                 <div class="button-group">
                     <button class="btn btn-gold" type="button" onclick="controlDevice('temperature_sensor', 'on')">Turn On</button>
                     <button class="btn btn-navy" type="button" onclick="controlDevice('temperature_sensor', 'off')">Turn Off</button>
                 </div>
             </section>
+
+            <!-- ====================================================================
+                 EXAMPLE: HOW TO ADD A NEW DEVICE CARD
+                 ====================================================================
+                 
+                 Copy this template and modify for your new device:
+                 
+                 <section class="card device-card">
+                     <header class="device-header">
+                         <h2>Water Pump</h2>
+                         <span class="device-gpio">GPIO 19</span>
+                     </header>
+                     <div class="device-status">
+                         <span class="status-indicator off" id="water-pump-indicator" aria-hidden="true"></span>
+                         <span id="water-pump-status">Status: Unknown</span>
+                     </div>
+                     <div class="button-group">
+                         <button class="btn btn-gold" type="button" onclick="controlDevice('water_pump', 'on')">Turn On</button>
+                         <button class="btn btn-navy" type="button" onclick="controlDevice('water_pump', 'off')">Turn Off</button>
+                     </div>
+                 </section>
+                 
+                 IMPORTANT NOTES:
+                 - Device name in onclick: "water_pump" (underscore)
+                 - HTML element IDs: "water-pump-indicator", "water-pump-status" (hyphens)
+                 - GPIO number must match ESP32 pin definition
+                 - Update app.js to handle this device (see app.js comments)
+                 - Update ESP32 code to listen to "/water_pump/state" (see main.cpp comments)
+                 
+            -->
+
         </div>
     </main>
 
+    <!-- ========================================================================
+         JAVASCRIPT - Load app.js for all functionality
+         ======================================================================== -->
     <script type="module" src="./app.js"></script>
 </body>
 </html>
-

@@ -1,3 +1,25 @@
+<!-- 
+    ============================================================================
+    CASH Login Page - Authentication Interface
+    ============================================================================
+    
+    Description:
+        - Landing page for the Cat Automated Smart Home (CASH) application
+        - Provides user authentication (login/signup) via Firebase Auth
+        - Supports email/password and Google OAuth login
+        - Redirects authenticated users to dashboard
+        
+    Functionality:
+        - Login form with email and password
+        - Signup form for new user registration
+        - Google OAuth login button
+        - Automatic redirect to dashboard after successful authentication
+        - All authentication logic handled by app.js
+        
+    Author: Eddie Kwak
+    Last Modified: 11/13/25
+-->
+
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
@@ -10,6 +32,9 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+  <!-- ========================================================================
+       HEADER SECTION - Site Branding and Navigation
+       ======================================================================== -->
   <header class="site-header">
     <div class="container header-inner">
       <div class="brand">
@@ -17,25 +42,41 @@
         <span class="brand-name">CASH</span>
       </div>
       <nav class="header-actions">
+        <!-- Sign out button (hidden by default, shown when user is logged in) -->
         <button id="signOutBtn" class="btn btn-outline" hidden>Sign out</button>
       </nav>
     </div>
   </header>
 
+  <!-- ========================================================================
+       MAIN CONTENT AREA - Authentication Forms
+       ======================================================================== -->
   <main class="hero">
     <div class="container hero-inner">
+      
+      <!-- Hero Text Section -->
       <section class="hero-copy">
         <h1>Cat Automated Smart Home</h1>
         <p>Log in to remotely interact with your feline friend.</p>
       </section>
 
+      <!-- ====================================================================
+           AUTHENTICATION CARD - Login and Signup Forms
+           ==================================================================== -->
       <section class="auth-card" id="authCard">
+        <!-- Tab Navigation - Switch between Login and Signup -->
         <div class="tabs" role="tablist">
           <button class="tab active" data-tab="login" role="tab" aria-selected="true">Log in</button>
           <button class="tab" data-tab="signup" role="tab" aria-selected="false">Sign up</button>
         </div>
 
+        <!-- Tab Panels - Contains the actual forms -->
         <div class="tab-panels">
+          
+          <!-- ================================================================
+               LOGIN FORM
+               ================================================================ -->
+          <!-- Handled by app.js initAuthForms() function -->
           <form id="loginForm" class="panel" data-panel="login" aria-hidden="false">
             <div class="field">
               <label for="loginEmail">Email</label>
@@ -46,11 +87,22 @@
               <input id="loginPassword" type="password" autocomplete="current-password" required>
             </div>
             <button type="submit" class="btn btn-gold">Log in</button>
+            
+            <!-- Divider between email login and Google login -->
             <div class="divider"><span>or</span></div>
+            
+            <!-- Google OAuth Login Button -->
+            <!-- Handled by app.js initGoogleAuth() function -->
             <button type="button" id="googleLoginBtn" class="btn btn-google">Continue with Google</button>
+            
+            <!-- Error/Success Message Display -->
             <p class="form-message" id="loginMessage" role="alert" aria-live="polite"></p>
           </form>
 
+          <!-- ================================================================
+               SIGNUP FORM
+               ================================================================ -->
+          <!-- Handled by app.js initAuthForms() function -->
           <form id="signupForm" class="panel hidden" data-panel="signup" aria-hidden="true">
             <div class="field">
               <label for="signupEmail">Email</label>
@@ -58,24 +110,38 @@
             </div>
             <div class="field">
               <label for="signupPassword">Password</label>
+              <!-- Minimum 6 characters required by Firebase -->
               <input id="signupPassword" type="password" autocomplete="new-password" minlength="6" required>
             </div>
             <button type="submit" class="btn btn-gold">Create account</button>
+            
+            <!-- Error/Success Message Display -->
             <p class="form-message" id="signupMessage" role="alert" aria-live="polite"></p>
           </form>
         </div>
       </section>
 
+      <!-- ====================================================================
+           WELCOME SECTION - Shown after successful authentication
+           ==================================================================== -->
+      <!-- This section is hidden by default and shown when user is logged in -->
+      <!-- Handled by app.js onAuthStateChanged() function -->
       <section id="appSection" class="app-section hidden">
         <div class="card">
           <h2>Welcome, <span id="userEmail"></span></h2>
           <p>Your cat tower is ready. Head to the dashboard to start playing.</p>
+          <!-- Navigation to Dashboard -->
+          <!-- Handled by app.js initDashboardNavigation() function -->
           <a class="btn btn-gold" href="#" id="goDashboard">Open Dashboard</a>
         </div>
       </section>
     </div>
   </main>
 
+  <!-- ========================================================================
+       JAVASCRIPT - Load app.js for all functionality
+       ======================================================================== -->
+  <!-- All authentication and navigation logic is in app.js -->
   <script type="module" src="./app.js"></script>
 </body>
 </html>
