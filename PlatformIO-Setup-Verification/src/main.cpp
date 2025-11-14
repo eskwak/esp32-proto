@@ -29,12 +29,11 @@
 
 // Firebase Realtime Database URL (DO NOT CHANGE unless database URL changes)
 // Format: hostname only, no protocol (https://) or trailing slash (/)
-#define REALTIME_DATABASE_URL "cat-automated-smart-home-default-rtdb.firebaseio.com"
-// #define REALTIME_DATABASE_URL "..."
+#define REALTIME_DATABASE_URL "..."
 
 // WiFi network credentials - UPDATE THESE WITH YOUR NETWORK INFO
-const char* SSID = "...";
-const char* PASSWORD = "...";
+const char* SSID = "ATT63xRGs2";
+const char* PASSWORD = "jxy%fin4#cud";
 
 // ============================================================================
 // PERIPHERAL PIN DEFINITIONS
